@@ -1,0 +1,74 @@
+// Demonstrates generic classes, multi-type parameters, generic methods, and bounded type parameters.
+import java.util.List;
+
+class Box<T> {
+    private T content;
+
+    Box(T content) {
+        this.content = content;
+    }
+
+    T get() {
+        return content;
+    }
+
+    void set(T value) {
+        this.content = value;
+    }
+}
+
+class Pair<K, V> {
+    private final K key;
+    private final V value;
+
+    Pair(K key, V value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    K getKey() { return key; }
+    V getValue() { return value; }
+
+    @Override
+    public String toString() {
+        return key + "=" + value;
+    }
+}
+
+public class GenericsDemo {
+    // Generic method: prints all elements in any List<T>
+    static <T> void printAll(List<T> items) {
+        for (T item : items) {
+            System.out.print(item + " ");
+        }
+        System.out.println();
+    }
+
+    // Bounded type parameter: T must implement Comparable<T>
+    static <T extends Comparable<T>> T maxOf(List<T> items) {
+        T best = items.get(0);
+        for (T item : items) {
+            if (item.compareTo(best) > 0) {
+                best = item;
+            }
+        }
+        return best;
+    }
+
+    public static void main(String[] args) {
+        Box<String> sb = new Box<>("Hello");
+        Box<Integer> ib = new Box<>(42); // Autoboxing int -> Integer
+
+        String s = sb.get();
+        int n = ib.get() + 1;
+        System.out.println(s + " " + n);
+
+        Pair<String, Integer> p = new Pair<>("age", 21);
+        System.out.println(p);
+
+        printAll(List.of(1, 2, 3));
+        printAll(List.of("a", "b"));
+        System.out.println(maxOf(List.of(3, 9, 4)));
+        System.out.println(maxOf(List.of("pear", "apple", "zebra")));
+    }
+}
